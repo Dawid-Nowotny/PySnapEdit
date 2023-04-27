@@ -29,26 +29,26 @@ class Scene:
         window_width = parent.width()
         window_height = parent.height()
 
-        # ok ok
+        # ok
         if window_width >= img_width and window_height >= img_height:
             parent.setWindowTitle("PySnapEdit - " + file_name)
 
-        # okno zbyt wąskie
+        # window too narrow
         if window_width < img_width and window_height >= img_height:
             parent.setGeometry(parent.window_x, parent.window_y, img_width, window_height)
 
-        # okno za niskie
+        # window too short
         if window_height < img_height and window_width >= img_width:
             parent.setGeometry(parent.window_x, parent.window_y, window_width, img_height)
 
-        # maksymalizacja
+        # maximalize
         if img_height > QDesktopWidget().screenGeometry().height() or img_width > QDesktopWidget().screenGeometry().width():
             parent.showMaximized()
             parent.setWindowTitle("PySnapEdit - " + file_name)
             self.is_image_displayed = True
             return
 
-        # dwie za małe
+        # too narrow and too short
         if window_width < img_width and window_height < img_height:
             parent.setGeometry(self.window_x, self.window_y, img_width, img_height)
 

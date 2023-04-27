@@ -54,6 +54,15 @@ class File:
                 pixmap = item.pixmap()
                 pixmap.save(file_name)
         except: pass
+    
+    def saveCompressed(self, encimg, format_filter):
+        try:
+            file_name, _ = QFileDialog.getSaveFileName(None, "Zapisz plik", "", format_filter)
+
+            if file_name:
+                with open(file_name, "wb") as f:
+                    f.write(encimg)
+        except: return
 
     def restartImage(self):
         if not self.image_path:

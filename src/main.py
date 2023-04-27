@@ -7,6 +7,7 @@ from fileOperations import File
 
 from menubar import Menubar
 from menubarFilters import MenubarFilters
+from menubarCompression import MenubarCompression
 from menubarAnalizer import MenubarAnalize
 
 from config import MENU_STYLE
@@ -33,6 +34,7 @@ class Main(QMainWindow):
         menubar.setStyleSheet(MENU_STYLE)
         self.setMenuBar(menubar)
         menubar.addMenu(MenubarAnalize(self))
+        menubar.addMenu(MenubarCompression(self, self.scene, self.file))
         menubar.addMenu(MenubarFilters(self))
 
     def restartWindowLocation(self):
