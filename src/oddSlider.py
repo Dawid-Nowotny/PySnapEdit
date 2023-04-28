@@ -8,3 +8,8 @@ class OddSlider(Slider):
         super().__init__(window_title, label_title, min_value, max_value, default_value)
         self.slider.setTickInterval(2)
         self.slider.setSingleStep(2)
+
+    def updateLabel(self, value):
+        if value % 2 == 0:
+            value -= 1
+        self.label.setText(str(value))

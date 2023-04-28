@@ -29,9 +29,9 @@ class Main(QMainWindow):
         menubar = Menubar(self, self.scene, self.file)
         menubar.setStyleSheet(MENU_STYLE)
         self.setMenuBar(menubar)
-        menubar.addMenu(MenubarAnalize(self))
+        menubar.addMenu(MenubarFilters(self, self.scene))
         menubar.addMenu(MenubarCompression(self, self.scene, self.file))
-        menubar.addMenu(MenubarFilters(self))
+        menubar.addMenu(MenubarAnalize(self))
 
         self.restartWindowLocation()
         self.setMinimumSize(400, 100)

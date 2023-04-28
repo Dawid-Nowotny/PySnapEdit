@@ -21,11 +21,11 @@ class DoubleSlider(QDialog):
         self.label1_name.setAlignment(Qt.AlignCenter)
         self.label2_name.setAlignment(Qt.AlignCenter)
         
-        slider1 = QSlider(Qt.Horizontal)
-        slider1.setMinimum(min_value1)
-        slider1.setMaximum(max_value1)
-        slider1.setValue(default_value1)
-        slider1.valueChanged.connect(self.updateLabel1)
+        self.slider1 = QSlider(Qt.Horizontal)
+        self.slider1.setMinimum(min_value1)
+        self.slider1.setMaximum(max_value1)
+        self.slider1.setValue(default_value1)
+        self.slider1.valueChanged.connect(self.updateLabel1)
         
         slider2 = QSlider(Qt.Horizontal)
         slider2.setMinimum(min_value2)
@@ -38,7 +38,7 @@ class DoubleSlider(QDialog):
 
         layout.addWidget(self.label1_name)
         layout.addWidget(self.label1)
-        layout.addWidget(slider1)
+        layout.addWidget(self.slider1)
         layout.addWidget(self.label2_name)
         layout.addWidget(self.label2)
         layout.addWidget(slider2)
@@ -51,4 +51,3 @@ class DoubleSlider(QDialog):
         
     def updateLabel2(self, value):
         self.label2.setText(str(value))
-

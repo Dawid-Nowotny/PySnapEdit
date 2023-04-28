@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QDesktopWidget
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QDesktopWidget, QGraphicsPixmapItem
 
 class Scene:
     def __init__(self, parent):
@@ -59,6 +59,11 @@ class Scene:
 
         parent.setWindowTitle("PySnapEdit - " + file_name)
         self.is_image_displayed = True
+
+    def applyFilter(self, pixmap):
+        item = QGraphicsPixmapItem(pixmap)
+        self.graphicsScene.clear()
+        self.graphicsScene.addItem(item)
 
     def clearPalette(self, parent, file):
         self.is_image_displayed = False
