@@ -13,18 +13,18 @@ class Slider(QDialog):
         self.label_name.setAlignment(Qt.AlignCenter)
         self.label.setAlignment(Qt.AlignCenter)
         
-        slider = QSlider(Qt.Horizontal)
-        slider.setMinimum(min_value)
-        slider.setMaximum(max_value)
-        slider.setValue(default_value)
-        slider.valueChanged.connect(self.updateLabel)
+        self.slider = QSlider(Qt.Horizontal)
+        self.slider.setMinimum(min_value)
+        self.slider.setMaximum(max_value)
+        self.slider.setValue(default_value)
+        self.slider.valueChanged.connect(self.updateLabel)
         
         button = QPushButton("OK")
         button.clicked.connect(self.accept)
         
         layout.addWidget(self.label_name)
         layout.addWidget(self.label)
-        layout.addWidget(slider)
+        layout.addWidget(self.slider)
         layout.addWidget(button)
         
         self.setLayout(layout)

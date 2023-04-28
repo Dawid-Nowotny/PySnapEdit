@@ -26,16 +26,16 @@ class Main(QMainWindow):
         self.setWindowTitle("PySnapEdit")
         self.setWindowIcon(QtGui.QIcon("files\\icon.png"))
 
-        self.restartWindowLocation()
-        self.setMinimumSize(400, 100)
-        self.setCentralWidget(self.scene.view)
-
         menubar = Menubar(self, self.scene, self.file)
         menubar.setStyleSheet(MENU_STYLE)
         self.setMenuBar(menubar)
         menubar.addMenu(MenubarAnalize(self))
         menubar.addMenu(MenubarCompression(self, self.scene, self.file))
         menubar.addMenu(MenubarFilters(self))
+
+        self.restartWindowLocation()
+        self.setMinimumSize(400, 100)
+        self.setCentralWidget(self.scene.view)
 
     def restartWindowLocation(self):
         self.showNormal()
