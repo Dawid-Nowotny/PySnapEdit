@@ -1,6 +1,9 @@
 from PyQt5.QtWidgets import QMenu, QAction, QDialog, QMessageBox
 
 from compresser import Compresser
+
+from dataStorage import DataStorage
+
 from slider import Slider
 
 from config import showAlert
@@ -27,8 +30,9 @@ class MenubarCompression(QMenu):
     def getCompressed(self, format):
         if self.scene.checkEmpty():
             return
-            
+        
         pixmap = self.scene.graphicsScene.items()[0].pixmap()
+        data_storage = DataStorage()
         compressor = Compresser(self.file)
 
         if format in ("JPG", "PNG", "WEPB"):
@@ -40,8 +44,8 @@ class MenubarCompression(QMenu):
                 "WEPB": compressor.WEBP_compression
             }[format]
             
-            slider = Slider(title, message, 0, 100, 50)
+            slider = Slider(title, message, 0, 100, data_storage.compression_rate)
             result = slider.exec_()
             if result == QDialog.Accepted:
-                comp_factor = int(slider.label.text())
-                compress_method(pixmap, comp_factor)
+                data_storage.compression_rate = int(slider.label.text())
+                compress_method(pixmap, data_storage.compression_rate)

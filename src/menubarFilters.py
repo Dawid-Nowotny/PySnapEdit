@@ -2,14 +2,12 @@ from PyQt5.QtWidgets import QMenu, QAction, QMessageBox, QDialog, QGraphicsPixma
 
 from imageFilters import ImageFilters
 
+from dataStorage import DataStorage
+
 from oddSlider import OddSlider
 from oddDoubleSlider import OddDoubleSlider
 from doubleSlider import DoubleSlider
 from limitedRangeSlider import LimitedRangeSlider
-
-TOP_KERNEL = 33
-LOW_KERNEL = 3
-START_KERNEL = 5
 
 class MenubarFilters(QMenu):
     def __init__(self, parent, scene):
@@ -63,48 +61,63 @@ class MenubarFilters(QMenu):
             return
         
         pixmap = self.scene.graphicsScene.items()[0].pixmap()
-        
+        data_storage = DataStorage()
+
         match fil_type:
             case "Adapt":
-                slider = OddDoubleSlider("Adaptacyjne progowanie", "Rozmiar bloku", LOW_KERNEL, TOP_KERNEL, START_KERNEL, "Stała C", -95, -5, -10)
+                slider = OddDoubleSlider("Adaptacyjne progowanie", "Rozmiar bloku", data_storage.LOW_KERNEL, data_storage.TOP_KERNEL, data_storage.binary_block, 
+                                         "Stała C", data_storage.LOW_C, data_storage.HIGH_C, data_storage.binary_C)
                 result = slider.exec_()
                 if result == QDialog.Accepted:
-                    self.filterApplicator.applyAdapt(pixmap, int(slider.label1.text()), int(slider.label2.text()))
+                    data_storage.binary_block = int(slider.label1.text())
+                    data_storage.binary_C = int(slider.label2.text())
+                    self.filterApplicator.applyAdapt(pixmap, data_storage.binary_block, data_storage.binary_C)
             case "Canny":
-                double_slider = LimitedRangeSlider("Detektor krawędzi Canny'ego", "Pierwszy próg", 0, 255, 50, "Drugi próg", 0, 255, 150)
-                result = double_slider.exec_()
+                slider = LimitedRangeSlider("Detektor krawędzi Canny'ego", "Pierwszy próg", data_storage.LOW_THRESHHOLD, data_storage.HIGH_THRESHHOLD, data_storage.canny_treshhold1, 
+                                            "Drugi próg", data_storage.LOW_THRESHHOLD, data_storage.HIGH_THRESHHOLD, data_storage.canny_treshhold2)
+                result = slider.exec_()
                 if result == QDialog.Accepted:
-                    self.filterApplicator.applyCanny(pixmap, int(double_slider.label1.text()), int(double_slider.label2.text()))
+                    data_storage.canny_treshhold1 = int(slider.label1.text())
+                    data_storage.canny_treshhold2 = int(slider.label2.text())
+                    self.filterApplicator.applyCanny(pixmap, data_storage.canny_treshhold1, data_storage.canny_treshhold2)
             case "Dilate":
-                slider = OddSlider("Dylatacja", "Rozmiar maski", LOW_KERNEL, TOP_KERNEL, START_KERNEL)
+                slider = OddSlider("Dylatacja", "Rozmiar maski", data_storage.LOW_KERNEL, data_storage.TOP_KERNEL, data_storage.dilate_kernel)
                 result = slider.exec_()
                 if result == QDialog.Accepted:
-                    self.filterApplicator.applyDilation(pixmap, int(slider.label.text()))
+                    data_storage.dilate_kernel = int(slider.label.text())
+                    self.filterApplicator.applyDilation(pixmap, data_storage.dilate_kernel)
             case "Erode":
-                slider = OddSlider("Erozja", "Rozmiar maski", LOW_KERNEL, TOP_KERNEL, START_KERNEL)
+                slider = OddSlider("Erozja", "Rozmiar maski", data_storage.LOW_KERNEL, data_storage.TOP_KERNEL, data_storage.erode_kernel)
                 result = slider.exec_()
                 if result == QDialog.Accepted:
-                    self.filterApplicator.applyErosion(pixmap, int(slider.label.text()))
-            case "Median":
-                slider = OddSlider("Filtr Medianowy", "Rozmiar maski", LOW_KERNEL, TOP_KERNEL, START_KERNEL)
-                result = slider.exec_()
-                if result == QDialog.Accepted:
-                    self.filterApplicator.applyMedian(pixmap, int(slider.label.text()))
+                    data_storage.erode_kernel = int(slider.label.text())
+                    self.filterApplicator.applyErosion(pixmap, data_storage.erode_kernel)
             case "Gauss":
-                double_slider = DoubleSlider("Rozmycie Gaussa", "Rozmiar maski", LOW_KERNEL, TOP_KERNEL, START_KERNEL, "sigma X", 0, 10, 1)
-                result = double_slider.exec_()
+                slider = OddDoubleSlider("Rozmycie Gaussa", "Rozmiar maski", data_storage.LOW_KERNEL, data_storage.TOP_KERNEL, data_storage.gauss_kernel, 
+                                         "sigma X", 0, 10, data_storage.gauss_sigma)
+                result = slider.exec_()
                 if result == QDialog.Accepted:
-                    self.filterApplicator.applyGaussianBlur(pixmap, int(double_slider.label1.text()), int(double_slider.label2.text()))
+                    data_storage.gauss_kernel = int(slider.label1.text())
+                    data_storage.gauss_sigma = int(slider.label2.text())
+                    self.filterApplicator.applyGaussianBlur(pixmap, data_storage.gauss_kernel, data_storage.gauss_sigma)
             case "Laplace":
-                slider = OddSlider("Filtr Laplace'a", "Rozmiar maski", LOW_KERNEL, TOP_KERNEL, START_KERNEL)
+                slider = OddSlider("Filtr Laplace'a", "Rozmiar maski", data_storage.LOW_KERNEL, data_storage.TOP_KERNEL, data_storage.laplace_kernel)
                 result = slider.exec_()
                 if result == QDialog.Accepted:
-                    self.filterApplicator.applyLaplacian(pixmap, int(slider.label.text()))
+                    data_storage.laplace_kernel = int(slider.label.text())
+                    self.filterApplicator.applyLaplacian(pixmap, data_storage.laplace_kernel)
+            case "Median":
+                slider = OddSlider("Filtr Medianowy", "Rozmiar maski", data_storage.LOW_KERNEL, data_storage.TOP_KERNEL, data_storage.median_kernel)
+                result = slider.exec_()
+                if result == QDialog.Accepted:
+                    data_storage.median_kernel = int(slider.label.text())
+                    self.filterApplicator.applyMedian(pixmap, data_storage.median_kernel)
             case "Morph":
-                slider = OddSlider("Otwarcie morfologiczne", "Rozmiar maski", LOW_KERNEL, TOP_KERNEL, START_KERNEL)
+                slider = OddSlider("Otwarcie morfologiczne", "Rozmiar maski", data_storage.LOW_KERNEL, data_storage.TOP_KERNEL, data_storage.morph_kernel)
                 result = slider.exec_()
                 if result == QDialog.Accepted:
-                    self.filterApplicator.applyMorphOpen(pixmap, int(slider.label.text()))
+                    data_storage.morph_kernel = int(slider.label.text())
+                    self.filterApplicator.applyMorphOpen(pixmap, data_storage.morph_kernel)
             case "Otsu":
                 self.filterApplicator.applyOtsu(pixmap)
             case "Negative":

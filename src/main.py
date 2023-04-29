@@ -9,6 +9,7 @@ from menubar import Menubar
 from menubarFilters import MenubarFilters
 from menubarCompression import MenubarCompression
 from menubarAnalizer import MenubarAnalize
+from menubarView import MenubarView
 
 from config import MENU_STYLE
 
@@ -32,6 +33,7 @@ class Main(QMainWindow):
         menubar.addMenu(MenubarFilters(self, self.scene))
         menubar.addMenu(MenubarCompression(self, self.scene, self.file))
         menubar.addMenu(MenubarAnalize(self))
+        menubar.addMenu(MenubarView(self))
 
         self.restartWindowLocation()
         self.setMinimumSize(400, 100)
