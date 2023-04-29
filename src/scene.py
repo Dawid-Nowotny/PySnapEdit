@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QDesktopWidget, QGraphicsPixmapItem
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QDesktopWidget, QGraphicsPixmapItem, QMessageBox
+
+from config import showAlert
 
 class Scene:
     def __init__(self, parent):
@@ -64,6 +66,12 @@ class Scene:
         item = QGraphicsPixmapItem(pixmap)
         self.graphicsScene.clear()
         self.graphicsScene.addItem(item)
+
+    def checkEmpty(self):
+        if len(self.graphicsScene.items()) == 0:   
+            showAlert("Błąd!", "Brak zdjęcia do nałożenia filtra.", QMessageBox.Warning)
+            print("Brak zdjęcia do nałożenia filtra")
+            return True
 
     def clearPalette(self, parent, file):
         self.is_image_displayed = False

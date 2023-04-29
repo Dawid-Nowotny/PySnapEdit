@@ -8,28 +8,28 @@ from config import showAlert
 class MenubarCompression(QMenu):
     def __init__(self, parent, scene, file):
         super().__init__("Kompresja", parent)
+        self.scene = scene
+        self.file = file
 
         compression_JPG = QAction("Kompresuj na JPG", self)
-        compression_JPG.triggered.connect(lambda: self.getCompressed("JPG", scene, file))
+        compression_JPG.triggered.connect(lambda: self.getCompressed("JPG"))
 
         compression_PNG = QAction("Kompresuj na PNG", self)
-        compression_PNG.triggered.connect(lambda: self.getCompressed("PNG", scene, file))
+        compression_PNG.triggered.connect(lambda: self.getCompressed("PNG"))
 
         compression_WEPB = QAction("Kompresuj na WEPB", self)
-        compression_WEPB.triggered.connect(lambda: self.getCompressed("WEPB", scene, file))
+        compression_WEPB.triggered.connect(lambda: self.getCompressed("WEPB"))
 
         self.addAction(compression_JPG)
         self.addAction(compression_PNG)
         self.addAction(compression_WEPB)
 
-    def getCompressed(self, format, scene, file):
-        if len(scene.graphicsScene.items()) == 0:   
-            showAlert("Błąd!", "Brak zdjęcia do kompresji.", QMessageBox.Warning)
-            print("Brak zdjęcia do kompresji")
+    def getCompressed(self, format):
+        if self.scene.checkEmpty():
             return
             
-        pixmap = scene.graphicsScene.items()[0].pixmap()
-        compressor = Compresser(file)
+        pixmap = self.scene.graphicsScene.items()[0].pixmap()
+        compressor = Compresser(self.file)
 
         if format in ("JPG", "PNG", "WEPB"):
             title = f"Kompresuj na {format}"
