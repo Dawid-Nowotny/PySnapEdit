@@ -12,4 +12,5 @@ class OddSlider(Slider):
     def updateLabel(self, value):
         if value % 2 == 0:
             value -= 1
+            self.slider.setValue(value)
         self.label.setText(str(value))

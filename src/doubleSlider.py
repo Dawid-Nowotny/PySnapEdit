@@ -27,11 +27,11 @@ class DoubleSlider(QDialog):
         self.slider1.setValue(default_value1)
         self.slider1.valueChanged.connect(self.updateLabel1)
         
-        slider2 = QSlider(Qt.Horizontal)
-        slider2.setMinimum(min_value2)
-        slider2.setMaximum(max_value2)
-        slider2.setValue(default_value2)
-        slider2.valueChanged.connect(self.updateLabel2)
+        self.slider2 = QSlider(Qt.Horizontal)
+        self.slider2.setMinimum(min_value2)
+        self.slider2.setMaximum(max_value2)
+        self.slider2.setValue(default_value2)
+        self.slider2.valueChanged.connect(self.updateLabel2)
             
         button = QPushButton("OK")
         button.clicked.connect(self.accept)
@@ -41,7 +41,7 @@ class DoubleSlider(QDialog):
         layout.addWidget(self.slider1)
         layout.addWidget(self.label2_name)
         layout.addWidget(self.label2)
-        layout.addWidget(slider2)
+        layout.addWidget(self.slider2)
         layout.addWidget(button)
 
         self.setLayout(layout)

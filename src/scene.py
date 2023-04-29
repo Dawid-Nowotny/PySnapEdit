@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QDesktopWidget, QGraphicsPixmapItem, QMessageBox
 
-from config import showAlert
+from config import SCENE_STYLE, showAlert
 
 class Scene:
     def __init__(self, parent):
         self.graphicsScene = QGraphicsScene(parent)
         self.view = QGraphicsView(self.graphicsScene)
-        self.view.setStyleSheet("background-color: #c0c0c0;")
+        self.view.setStyleSheet(SCENE_STYLE)
         self.is_image_displayed = False
         self.window_width = 0
         self.window_height = 0
@@ -16,7 +16,6 @@ class Scene:
             item, img_height, img_width, file_name = file.openFile()
             img_height += 25
             img_width += 5
-            print(self.is_image_displayed)
 
             if self.is_image_displayed:
                 parent.openNewWindowWithImage(item, img_height, img_width, file_name)

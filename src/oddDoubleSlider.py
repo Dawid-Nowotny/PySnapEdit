@@ -14,4 +14,5 @@ class OddDoubleSlider(DoubleSlider):
     def updateLabel1(self, value):
         if value % 2 == 0:
             value -= 1
+            self.slider1.setValue(value)
         self.label1.setText(str(value))

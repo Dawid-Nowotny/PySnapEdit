@@ -28,6 +28,15 @@ class ImageFilters:
         pixmap = self.imageToPixmap(img)
         self.scene.applyFilter(pixmap)
     
+    def applyCanny(self, pixmap, min_threshold, max_threshold):
+        img = self.pixmapToImage(pixmap)
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
+        img = cv2.GaussianBlur(img, (3,3), 0)
+        img = cv2.Canny(img, min_threshold, max_threshold)
+        qimg = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_Grayscale8)
+        pixmap = QPixmap.fromImage(qimg)
+        self.scene.applyFilter(pixmap)
+
     def applyDilation(self, pixmap, kernel_size):
         img = self.pixmapToImage(pixmap)
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
@@ -45,9 +54,47 @@ class ImageFilters:
         pixmap = self.imageToPixmap(img)
         self.scene.applyFilter(pixmap)
 
+    def applyGaussianBlur(self, pixmap, kernel_size, sigma_x):
+        img = self.pixmapToImage(pixmap)
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
+        img = cv2.GaussianBlur(img, (kernel_size, kernel_size), sigma_x)
+        pixmap = self.imageToPixmap(img)
+        self.scene.applyFilter(pixmap)
+
+    def applyLaplacian(self, pixmap, kernel_size):
+        img = self.pixmapToImage(pixmap)
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
+        img = cv2.Laplacian(img, cv2.CV_8U, kernel_size)
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        pixmap = self.imageToPixmap(img)
+        self.scene.applyFilter(pixmap)
+
+    def applyMedian(self, pixmap, kernel_size):
+        img = self.pixmapToImage(pixmap)
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
+        img = cv2.medianBlur(img, kernel_size)
+        pixmap = self.imageToPixmap(img)
+        self.scene.applyFilter(pixmap)
+    
+    def applyMorphOpen(self, pixmap, kernel_size):
+        img = self.pixmapToImage(pixmap)
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
+        img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+        pixmap = self.imageToPixmap(img)
+        self.scene.applyFilter(pixmap)
+
     def applyNegative(self, pixmap):
         img = self.pixmapToImage(pixmap)
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
         img = cv2.bitwise_not(img)
+        pixmap = self.imageToPixmap(img)
+        self.scene.applyFilter(pixmap)
+
+    def applyOtsu(self, pixmap):
+        img = self.pixmapToImage(pixmap)
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
+        _, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         pixmap = self.imageToPixmap(img)
         self.scene.applyFilter(pixmap)
