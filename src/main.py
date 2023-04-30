@@ -4,6 +4,7 @@ from PyQt5 import QtGui
 
 from scene import Scene
 from fileOperations import File
+from zoom import Zoom
 
 from menubar import Menubar
 from menubarFilters import MenubarFilters
@@ -18,6 +19,8 @@ class Main(QMainWindow):
         super().__init__()
         self.scene = Scene(self)
         self.file = File()
+        self.zoom = Zoom(self.scene)
+
         self.window_list = []
 
         self.initGUI()
@@ -27,13 +30,13 @@ class Main(QMainWindow):
         self.setWindowTitle("PySnapEdit")
         self.setWindowIcon(QtGui.QIcon("files\\icon.png"))
 
-        menubar = Menubar(self, self.scene, self.file)
+        menubar = Menubar(self, self.scene, self.file, self.zoom)
         menubar.setStyleSheet(MENU_STYLE)
         self.setMenuBar(menubar)
         menubar.addMenu(MenubarFilters(self, self.scene))
         menubar.addMenu(MenubarCompression(self, self.scene, self.file))
         menubar.addMenu(MenubarAnalize(self))
-        menubar.addMenu(MenubarView(self))
+        menubar.addMenu(MenubarView(self, self.zoom))
 
         self.restartWindowLocation()
         self.setMinimumSize(400, 100)

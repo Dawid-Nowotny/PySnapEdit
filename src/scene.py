@@ -72,9 +72,10 @@ class Scene:
             print("Brak zdjęcia do nałożenia filtra")
             return True
 
-    def clearPalette(self, parent, file):
+    def clearPalette(self, parent, file, zoom):
+        zoom.zoomRestart()
         self.is_image_displayed = False
-
+    
         self.graphicsScene.clear()
         file.restartImage()
         parent.restartWindowLocation()
