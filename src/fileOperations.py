@@ -2,6 +2,7 @@ from os import path
 
 from PyQt5.QtWidgets import QFileDialog, QGraphicsPixmapItem, QMessageBox
 from PyQt5.QtGui import QPixmap
+import cv2
 
 from config import showAlert
 
@@ -63,6 +64,13 @@ class File:
                 with open(file_name, "wb") as f:
                     f.write(encimg)
         except: return
+
+    def isImageFile(self, file_name):
+        try:
+            image = cv2.imread(file_name)
+            return image is not None
+        except:
+            return False
 
     def restartImage(self):
         if not self.image_path:

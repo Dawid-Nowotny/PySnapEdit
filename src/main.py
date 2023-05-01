@@ -17,8 +17,8 @@ from config import MENU_STYLE
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.scene = Scene(self)
         self.file = File()
+        self.scene = Scene(self, self.file)
         self.zoom = Zoom(self.scene)
 
         self.window_list = []
