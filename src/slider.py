@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 class Slider(QDialog):
     def __init__(self, window_title, label_title, min_value, max_value, default_value):
         super().__init__()
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         
         layout = QVBoxLayout()
         self.setWindowTitle(window_title)

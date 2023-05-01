@@ -5,6 +5,7 @@ class DoubleSlider(QDialog):
     def __init__(self, window_title, title1, min_value1, max_value1, default_value1,
                  title2, min_value2, max_value2, default_value2):
         super().__init__()
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         
         layout = QVBoxLayout()
         

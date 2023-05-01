@@ -35,7 +35,7 @@ class Main(QMainWindow):
         self.setMenuBar(menubar)
         menubar.addMenu(MenubarFilters(self, self.scene))
         menubar.addMenu(MenubarCompression(self, self.scene, self.file))
-        menubar.addMenu(MenubarAnalize(self))
+        menubar.addMenu(MenubarAnalize(self, self.scene))
         menubar.addMenu(MenubarView(self, self.zoom))
 
         self.restartWindowLocation()

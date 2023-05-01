@@ -68,8 +68,8 @@ class Scene:
 
     def checkEmpty(self):
         if len(self.graphicsScene.items()) == 0:   
-            showAlert("Błąd!", "Brak zdjęcia do nałożenia filtra.", QMessageBox.Warning)
-            print("Brak zdjęcia do nałożenia filtra")
+            showAlert("Błąd!", "Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.", QMessageBox.Warning)
+            print("Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.")
             return True
 
     def clearPalette(self, parent, file, zoom):

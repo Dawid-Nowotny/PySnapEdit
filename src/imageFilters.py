@@ -3,22 +3,11 @@ from PyQt5.QtGui import QImage, QPixmap
 import numpy as np
 import cv2
 
-class ImageFilters:
+from imageUtils import ImageUtils
+
+class ImageFilters(ImageUtils):
     def __init__(self, scene):
         self.scene = scene
-
-    def imageToPixmap(self, img):
-        h, w, ch = img.shape
-        bytesPerLine = ch * w
-        image = QImage(img.data, w, h, bytesPerLine, QImage.Format_RGB888)
-        pixmap = QPixmap.fromImage(image)
-        return pixmap
-    
-    def pixmapToImage(self, pixmap):
-        image = pixmap.toImage()
-        buffer = image.bits().asstring(image.byteCount())
-        img = np.frombuffer(buffer, dtype=np.uint8).reshape((image.height(), image.width(), 4))
-        return img
     
     def applyAdapt(self, pixmap, block_size, constant):
         img = self.pixmapToImage(pixmap)
