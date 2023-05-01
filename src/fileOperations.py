@@ -1,7 +1,7 @@
 from os import path
 
 from PyQt5.QtWidgets import QFileDialog, QGraphicsPixmapItem, QMessageBox
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QImage, QPainter
 import cv2
 
 from config import showAlert
@@ -37,8 +37,13 @@ class File:
             print("Podana ścieżka do pliku nie istnieje")
             return
 
-        pixmap = scene.items()[0].pixmap()
-        pixmap.save(self.image_path)
+        image = QImage(scene.sceneRect().size().toSize(), QImage.Format_ARGB32)
+
+        painter = QPainter(image)
+        scene.render(painter)
+        painter.end()
+
+        image.save(self.image_path)
         print("Zapisano")
 
     def saveFileAs(self, parent, scene):
@@ -51,9 +56,13 @@ class File:
             file_name, _ = QFileDialog.getSaveFileName(parent, "Zapisz plik", "", FILE_EX)
 
             if file_name:
-                item = scene.items()[0]
-                pixmap = item.pixmap()
-                pixmap.save(file_name)
+                image = QImage(scene.sceneRect().size().toSize(), QImage.Format_ARGB32)
+
+                painter = QPainter(image)
+                scene.render(painter)
+                painter.end()
+
+                image.save(file_name)
         except: pass
     
     def saveCompressed(self, encimg, format_filter):
@@ -61,9 +70,15 @@ class File:
             file_name, _ = QFileDialog.getSaveFileName(None, "Zapisz plik", "", format_filter)
 
             if file_name:
-                with open(file_name, "wb") as f:
-                    f.write(encimg)
-        except: return
+                image = QImage.fromData(encimg)
+
+                if not image.isNull():
+                    image.save(file_name)
+                    print("Zapisano")
+                else:
+                    print("Błąd podczas zapisywania obrazu")
+        except Exception as e:
+            print("Błąd: ", str(e))
 
     def isImageFile(self, file_name):
         try:

@@ -3,10 +3,8 @@ from PyQt5.QtWidgets import QMenu, QAction, QDialog, QMessageBox
 from compresser import Compresser
 
 from dataStorage import DataStorage
-
+from imageUtils import ImageUtils
 from slider import Slider
-
-from config import showAlert
 
 class MenubarCompression(QMenu):
     def __init__(self, parent, scene, file):
@@ -31,7 +29,7 @@ class MenubarCompression(QMenu):
         if self.scene.checkEmpty():
             return
         
-        pixmap = self.scene.graphicsScene.items()[0].pixmap()
+        pixmap = ImageUtils.sceneToPixmap(self.scene)
         data_storage = DataStorage()
         compressor = Compresser(self.file)
 

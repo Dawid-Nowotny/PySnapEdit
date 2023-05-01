@@ -3,6 +3,8 @@ from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPixmap
 from functools import partial
 
+from drawingTool import DrawingTool
+
 from config import SCENE_STYLE, showAlert
 
 class Scene:
@@ -20,6 +22,8 @@ class Scene:
         dropPartial = partial(self.dropEvent, parent=parent, file=file)
         self.view.dropEvent = dropPartial
 
+        self.drawingToolRestart()
+
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             event.accept()
@@ -29,17 +33,6 @@ class Scene:
     def dragMoveEvent(self, event):
         event.setDropAction(Qt.MoveAction)
         event.accept()
-
-    def addItemToScene(self, parent, item, img_height, img_width, file_name):
-        img_height += 25
-        img_width += 5
-
-        if self.is_image_displayed:
-            parent.openNewWindowWithImage(item, img_height, img_width, file_name)
-            return
-        else:
-            self.graphicsScene.addItem(item)
-            self.adjustWindowDimensions(parent, img_height, img_width, file_name)
 
     def dropEvent(self, event, parent, file):
         if event.mimeData().hasUrls():
@@ -51,6 +44,7 @@ class Scene:
 
                 try:
                     if file.isImageFile(file_name):
+                        file.image_path = file_name
                         item = QGraphicsPixmapItem(QPixmap(file_name))
                         img_height = int(item.boundingRect().height())
                         img_width = int(item.boundingRect().width())
@@ -68,6 +62,17 @@ class Scene:
             self.addItemToScene(parent, item, img_height, img_width, file_name)
         except:
             return
+    
+    def addItemToScene(self, parent, item, img_height, img_width, file_name):
+        img_height += 25
+        img_width += 5
+
+        if self.is_image_displayed:
+            parent.openNewWindowWithImage(item, img_height, img_width, file_name)
+            return
+        else:
+            self.graphicsScene.addItem(item)
+            self.adjustWindowDimensions(parent, img_height, img_width, file_name)
 
     def adjustWindowDimensions(self, parent, img_height, img_width, file_name):
         window_width = parent.width()
@@ -115,14 +120,21 @@ class Scene:
             print("Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.")
             return True
 
+    def drawingToolRestart(self):
+        self.drawing_view = DrawingTool(self.view, self)
+        self.view.mousePressEvent = self.drawing_view.mousePressEvent
+        self.view.mouseMoveEvent = self.drawing_view.mouseMoveEvent
+        self.view.mouseReleaseEvent = self.drawing_view.mouseReleaseEvent
+
     def clearPalette(self, parent, file, zoom):
         zoom.zoomRestart()
         self.is_image_displayed = False
-    
+
         self.graphicsScene.clear()
         file.restartImage()
         parent.restartWindowLocation()
 
         self.graphicsScene = QGraphicsScene()
         self.view.setScene(self.graphicsScene)
+        self.drawingToolRestart()
         parent.setWindowTitle("PySnapEdit")

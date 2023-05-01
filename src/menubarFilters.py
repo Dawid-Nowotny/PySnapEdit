@@ -2,7 +2,11 @@ from PyQt5.QtWidgets import QMenu, QAction, QMessageBox, QDialog, QGraphicsPixma
 
 from imageFilters import ImageFilters
 
+from PyQt5.QtWidgets import QFileDialog, QGraphicsPixmapItem, QMessageBox
+from PyQt5.QtGui import QPixmap, QImage, QPainter
 from dataStorage import DataStorage
+
+from imageUtils import ImageUtils
 
 from oddSlider import OddSlider
 from oddDoubleSlider import OddDoubleSlider
@@ -60,7 +64,7 @@ class MenubarFilters(QMenu):
         if self.scene.checkEmpty():
             return
         
-        pixmap = self.scene.graphicsScene.items()[0].pixmap()
+        pixmap = ImageUtils.sceneToPixmap(self.scene)
         data_storage = DataStorage()
 
         match fil_type:

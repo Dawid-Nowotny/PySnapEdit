@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QMenu, QAction
 
+from imageUtils import ImageUtils
 from textRecognizer import TextRecognizer
 
 class MenubarAnalize(QMenu):
@@ -16,5 +17,5 @@ class MenubarAnalize(QMenu):
         if self.scene.checkEmpty():
             return
         
-        pixmap = self.scene.graphicsScene.items()[0].pixmap()
+        pixmap = ImageUtils.sceneToPixmap(self.scene)
         TextRecognizer().recognize(pixmap)
