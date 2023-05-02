@@ -65,7 +65,8 @@ class Main(QMainWindow):
         new_window.scene.is_image_displayed = True
         new_window.scene.adjustWindowDimensions(new_window, img_height, img_width, file_name)
         
-        new_window.file.image_path = file_name
+        if file_name is not None:
+            new_window.file.image_path = file_name
 
         new_window.show()
 

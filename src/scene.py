@@ -1,11 +1,10 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QDesktopWidget, QGraphicsPixmapItem, QMessageBox
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QDesktopWidget, QGraphicsPixmapItem, QMessageBox, QGraphicsRectItem, QDialog
 from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtGui import QDrag, QPixmap
+from PyQt5.QtGui import QDrag, QPixmap, QBrush, QColor, QPen
 from functools import partial
 
 from drawingTool import DrawingTool
-
-from config import SCENE_STYLE, showAlert
+from config import SCENE_STYLE
 
 class Scene:
     def __init__(self, parent, file):
@@ -63,6 +62,13 @@ class Scene:
         except:
             return
     
+    def addColorField(self, parent, x, y, color):
+        rect = QGraphicsRectItem(x, y, x, y)
+        brush = QBrush(QColor(color))
+        rect.setBrush(brush)
+        rect.setPen(QPen(Qt.NoPen))
+        self.addItemToScene(parent, rect, y, x, None)
+    
     def addItemToScene(self, parent, item, img_height, img_width, file_name):
         img_height += 25
         img_width += 5
@@ -78,10 +84,6 @@ class Scene:
         window_width = parent.width()
         window_height = parent.height()
 
-        # ok
-        if window_width >= img_width and window_height >= img_height:
-            parent.setWindowTitle("PySnapEdit - " + file_name)
-
         # window too narrow
         if window_width < img_width and window_height >= img_height:
             parent.setGeometry(parent.window_x, parent.window_y, img_width, window_height)
@@ -93,21 +95,20 @@ class Scene:
         # maximalize
         if img_height > QDesktopWidget().screenGeometry().height() or img_width > QDesktopWidget().screenGeometry().width():
             parent.showMaximized()
-            parent.setWindowTitle("PySnapEdit - " + file_name)
-            self.is_image_displayed = True
-            return
 
         # too narrow and too short
         if window_width < img_width and window_height < img_height:
-            parent.setGeometry(self.window_x, self.window_y, img_width, img_height)
+            parent.setGeometry(parent.window_x, parent.window_y, img_width, img_height)
 
         qr = parent.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         parent.move(qr.topLeft())
 
-        parent.setWindowTitle("PySnapEdit - " + file_name)
         self.is_image_displayed = True
+
+        if file_name is not None:
+            parent.setWindowTitle("PySnapEdit - " + file_name)
 
     def applyFilter(self, pixmap):
         item = QGraphicsPixmapItem(pixmap)
@@ -115,9 +116,7 @@ class Scene:
         self.graphicsScene.addItem(item)
 
     def checkEmpty(self):
-        if len(self.graphicsScene.items()) == 0:   
-            showAlert("Błąd!", "Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.", QMessageBox.Warning)
-            print("Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.")
+        if len(self.graphicsScene.items()) == 0:
             return True
 
     def drawingToolRestart(self):

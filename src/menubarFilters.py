@@ -13,6 +13,8 @@ from oddDoubleSlider import OddDoubleSlider
 from doubleSlider import DoubleSlider
 from limitedRangeSlider import LimitedRangeSlider
 
+from config import showAlert
+
 class MenubarFilters(QMenu):
     def __init__(self, parent, scene):
         super().__init__("Filtry", parent)
@@ -62,6 +64,8 @@ class MenubarFilters(QMenu):
 
     def updateFilter(self, fil_type):
         if self.scene.checkEmpty():
+            showAlert("Błąd!", "Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.", QMessageBox.Warning)
+            print("Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.")
             return
         
         pixmap = ImageUtils.sceneToPixmap(self.scene)

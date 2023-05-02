@@ -1,5 +1,7 @@
-from PyQt5.QtWidgets import QMenuBar, QAction, QApplication
+from PyQt5.QtWidgets import QMenuBar, QAction, QApplication, QDialog
 from PyQt5.QtGui import QKeySequence
+
+from resolutionPickerDialog import ResolutionPickerDialog
 
 class Menubar(QMenuBar):
     def __init__(self, parent, scene, file, zoom):
@@ -8,6 +10,10 @@ class Menubar(QMenuBar):
         open_file = QAction("Otwórz", self)
         open_file.triggered.connect(lambda: scene.setImage(parent, file))
         open_file.setShortcut(QKeySequence("Ctrl+O"))
+
+        create_file = QAction("Utwórz", self)
+        create_file.triggered.connect(lambda: self.showResDialog(parent, scene))
+        create_file.setShortcut(QKeySequence("Ctrl+R"))
 
         new_window = QAction("Nowe okno", self)
         new_window.triggered.connect(parent.openNewWindow)
@@ -18,7 +24,7 @@ class Menubar(QMenuBar):
         save_file.setShortcut(QKeySequence("Ctrl+S"))
 
         save_fileAs = QAction("Zapisz jako", self)
-        save_fileAs.triggered.connect(lambda: file.saveFileAs(self, scene.graphicsScene))
+        save_fileAs.triggered.connect(lambda: file.saveFileAs(self, scene))
         save_fileAs.setShortcut(QKeySequence("Ctrl+Shift+S"))
 
         clear_image = QAction("Wyczyść płótno", self)
@@ -34,6 +40,7 @@ class Menubar(QMenuBar):
         close_app.setShortcut(QKeySequence("Ctrl+Q"))
 
         file_menu.addAction(open_file)
+        file_menu.addAction(create_file)
         file_menu.addAction(new_window)
         file_menu.addSeparator()
         file_menu.addAction(save_file)
@@ -43,3 +50,11 @@ class Menubar(QMenuBar):
         file_menu.addSeparator()
         file_menu.addAction(close_window)
         file_menu.addAction(close_app)
+
+    def showResDialog(slef, parent, scene):
+        dialog = ResolutionPickerDialog(parent)
+        if dialog.exec_() == QDialog.Accepted:
+            x = int(dialog.x_input.text())
+            y = int(dialog.y_input.text())
+            color = dialog.selected_color.name()
+            scene.addColorField(parent, x, y, color)

@@ -47,19 +47,19 @@ class File:
         print("Zapisano")
 
     def saveFileAs(self, parent, scene):
-        if not self.image_path:
-            showAlert("Brak zdjęcia!", "Nie ma zdjęcia do zapisania", QMessageBox.Warning)
-            print("Nie ma zdjęcia do zapisania")
+        if scene.checkEmpty():
+            showAlert("Błąd!", "Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.", QMessageBox.Warning)
+            print("Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.")
             return
 
         try:
             file_name, _ = QFileDialog.getSaveFileName(parent, "Zapisz plik", "", FILE_EX)
 
             if file_name:
-                image = QImage(scene.sceneRect().size().toSize(), QImage.Format_ARGB32)
+                image = QImage(scene.graphicsScene.sceneRect().size().toSize(), QImage.Format_ARGB32)
 
                 painter = QPainter(image)
-                scene.render(painter)
+                scene.graphicsScene.render(painter)
                 painter.end()
 
                 image.save(file_name)
@@ -71,12 +71,7 @@ class File:
 
             if file_name:
                 image = QImage.fromData(encimg)
-
-                if not image.isNull():
-                    image.save(file_name)
-                    print("Zapisano")
-                else:
-                    print("Błąd podczas zapisywania obrazu")
+                image.save(file_name)
         except Exception as e:
             print("Błąd: ", str(e))
 

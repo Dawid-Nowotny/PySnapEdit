@@ -6,6 +6,8 @@ from dataStorage import DataStorage
 from imageUtils import ImageUtils
 from slider import Slider
 
+from config import showAlert
+
 class MenubarCompression(QMenu):
     def __init__(self, parent, scene, file):
         super().__init__("Kompresja", parent)
@@ -27,6 +29,8 @@ class MenubarCompression(QMenu):
 
     def getCompressed(self, format):
         if self.scene.checkEmpty():
+            showAlert("Błąd!", "Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.", QMessageBox.Warning)
+            print("Brak zdjęcia, dodaj zdjęcie aby wykonać na nim operacje.")
             return
         
         pixmap = ImageUtils.sceneToPixmap(self.scene)
