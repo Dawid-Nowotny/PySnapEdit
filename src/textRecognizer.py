@@ -4,9 +4,9 @@ import numpy as np
 
 from imageUtils import ImageUtils
 
-class TextRecognizer(ImageUtils):
+class TextRecognizer():
     def recognize(self, pixmap):
-        img = self.pixmapToImage(pixmap)
+        img = ImageUtils().pixmapToImage(pixmap)
         text = pytesseract.image_to_string(img, lang='eng')
 
         return text

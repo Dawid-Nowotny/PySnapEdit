@@ -95,6 +95,10 @@ class Scene:
         # maximalize
         if img_height > QDesktopWidget().screenGeometry().height() or img_width > QDesktopWidget().screenGeometry().width():
             parent.showMaximized()
+            self.is_image_displayed = True
+            if file_name is not None:
+                parent.setWindowTitle("PySnapEdit - " + file_name)
+            return
 
         # too narrow and too short
         if window_width < img_width and window_height < img_height:
