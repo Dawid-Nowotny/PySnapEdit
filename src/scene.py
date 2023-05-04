@@ -124,7 +124,7 @@ class Scene:
             return True
 
     def drawingToolRestart(self):
-        self.drawing_view = DrawingTool(self.view, self)
+        self.drawing_view = DrawingTool(self)
         self.view.mousePressEvent = self.drawing_view.mousePressEvent
         self.view.mouseMoveEvent = self.drawing_view.mouseMoveEvent
         self.view.mouseReleaseEvent = self.drawing_view.mouseReleaseEvent

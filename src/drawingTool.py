@@ -4,38 +4,40 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPathItem
 from PyQt5.QtGui import QPen, QColor, QBrush, QPainterPath, QPainter
 
 class DrawingTool:
-    def __init__(self, view, scene_self):
-        self.view = view
-        self.s = scene_self
-        self.scene = view.scene()
-        self.drawing = False
+    def __init__(self, scene):
+        self.scene = scene
         self.last_pos = QPointF()
+        self.brush_color = QColor("#000000")
+        self.line_thickness = 2
+
+        self.drawing = False
         self.path_item = None
+        self.is_drawing_enabled = False
 
     def mousePressEvent(self, event):
-        if self.s.is_image_displayed and event.button() == Qt.LeftButton:
+        if self.is_drawing_enabled and self.scene.is_image_displayed and event.button() == Qt.LeftButton:
             self.drawing = True
-            self.last_pos = self.view.mapToScene(event.pos())
+            self.last_pos = self.scene.view.mapToScene(event.pos())
 
             self.path_item = QGraphicsPathItem()
-            pen = QPen(Qt.black, 2, Qt.SolidLine)
+            pen = QPen(self.brush_color, self.line_thickness, Qt.SolidLine)
             self.path_item.setPen(pen)
-            self.scene.addItem(self.path_item)
+            self.scene.view.scene().addItem(self.path_item)
             self.path_item.setPos(self.last_pos)
 
     def mouseMoveEvent(self, event):
-        if self.drawing and self.s.is_image_displayed:
+        if self.drawing and self.scene.is_image_displayed:
             self.drawLineTo(event.pos())
 
     def mouseReleaseEvent(self, event):
-        if self.s.is_image_displayed and event.button() == Qt.LeftButton and self.drawing:
+        if self.scene.is_image_displayed and event.button() == Qt.LeftButton and self.drawing:
             self.drawing = False
             self.drawLineTo(event.pos())
             self.path_item = None
 
     def drawLineTo(self, end_pos):
-        scene_pos = self.view.mapToScene(end_pos)
-        image_rect = self.view.sceneRect()
+        scene_pos = self.scene.view.mapToScene(end_pos)
+        image_rect = self.scene.view.sceneRect()
         if image_rect.contains(scene_pos) and self.path_item:
             path = self.path_item.path()
             path.lineTo(scene_pos - self.path_item.pos())

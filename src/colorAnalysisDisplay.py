@@ -24,15 +24,15 @@ class ColorAnalysisDisplay(QWidget):
         
         layout = QHBoxLayout(self)
         self.setLayout(layout)
-        layout.addWidget(self._plot_histogram())
-        layout.addWidget(self._generate_color_palette())
+        layout.addWidget(self.plotHistogram())
+        layout.addWidget(self.generateColorPalette())
         
         self.setWindowTitle("PySnapEdit - analiza kolorów")
         self.setWindowIcon(QtGui.QIcon("files\\icon.png"))
 
         return self
     
-    def _plot_histogram(self):
+    def plotHistogram(self):
         fig = Figure()
         canvas = FigureCanvas(fig)
         ax = fig.add_subplot(111)
@@ -43,7 +43,7 @@ class ColorAnalysisDisplay(QWidget):
         ax.set_xlim([0, 180])
         return canvas
 
-    def _generate_color_palette(self):
+    def generateColorPalette(self):
         fig = Figure()
         canvas = FigureCanvas(fig)
         ax = fig.add_subplot(111)

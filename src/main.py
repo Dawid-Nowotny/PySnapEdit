@@ -6,11 +6,13 @@ from scene import Scene
 from fileOperations import File
 from zoom import Zoom
 
+from sideMenu import SideMenu
 from menubar import Menubar
 from menubarFilters import MenubarFilters
 from menubarCompression import MenubarCompression
 from menubarAnalizer import MenubarAnalize
 from menubarView import MenubarView
+from menubarManageDock import MenubarManageDock
 
 from config import MENU_STYLE
 
@@ -30,6 +32,7 @@ class Main(QMainWindow):
         self.setWindowTitle("PySnapEdit")
         self.setWindowIcon(QtGui.QIcon("files\\icon.png"))
 
+        side_menu = SideMenu(self, self.scene)
         menubar = Menubar(self, self.scene, self.file, self.zoom)
         menubar.setStyleSheet(MENU_STYLE)
         self.setMenuBar(menubar)
@@ -37,6 +40,7 @@ class Main(QMainWindow):
         menubar.addMenu(MenubarCompression(self, self.scene, self.file))
         menubar.addMenu(MenubarAnalize(self, self.scene))
         menubar.addMenu(MenubarView(self, self.zoom))
+        menubar.addMenu(MenubarManageDock(self, self.scene, side_menu))
 
         self.restartWindowLocation()
         self.setMinimumSize(400, 100)
