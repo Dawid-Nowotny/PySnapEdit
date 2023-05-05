@@ -8,7 +8,6 @@ class DrawingTool:
         self.scene = scene
         self.last_pos = QPointF()
         self.brush_color = QColor("#000000")
-        self.line_thickness = 2
 
         self.drawing = False
         self.path_item = None
@@ -20,7 +19,7 @@ class DrawingTool:
             self.last_pos = self.scene.view.mapToScene(event.pos())
 
             self.path_item = QGraphicsPathItem()
-            pen = QPen(self.brush_color, self.line_thickness, Qt.SolidLine)
+            pen = QPen(self.brush_color, self.calculateBrushSize(), Qt.SolidLine)
             self.path_item.setPen(pen)
             self.scene.view.scene().addItem(self.path_item)
             self.path_item.setPos(self.last_pos)
@@ -38,7 +37,24 @@ class DrawingTool:
     def drawLineTo(self, end_pos):
         scene_pos = self.scene.view.mapToScene(end_pos)
         image_rect = self.scene.view.sceneRect()
-        if image_rect.contains(scene_pos) and self.path_item:
+        if self.path_item:
             path = self.path_item.path()
-            path.lineTo(scene_pos - self.path_item.pos())
-            self.path_item.setPath(path)
+            if image_rect.contains(scene_pos):
+                pen = QPen(self.brush_color, self.calculateBrushSize(), Qt.SolidLine)
+                self.path_item.setPen(pen)
+
+                brush_radius = self.calculateBrushSize() / 2
+                image_rect_adjusted = image_rect.adjusted(brush_radius, brush_radius, -brush_radius, -brush_radius)
+
+                if image_rect_adjusted.contains(scene_pos):
+                    path.lineTo(scene_pos - self.path_item.pos())
+                    self.path_item.setPath(path)
+            else:
+                self.drawing = None
+
+    def calculateBrushSize(self):
+        image_rect = self.scene.view.sceneRect()
+        width_ratio = image_rect.width() / self.scene.view.width()
+        height_ratio = image_rect.height() / self.scene.view.height()
+        ratio = max(width_ratio, height_ratio)
+        return ratio*2

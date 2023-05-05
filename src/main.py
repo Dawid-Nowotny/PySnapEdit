@@ -33,7 +33,7 @@ class Main(QMainWindow):
         self.setWindowIcon(QtGui.QIcon("files\\icon.png"))
 
         side_menu = SideMenu(self, self.scene)
-        menubar = Menubar(self, self.scene, self.file, self.zoom)
+        menubar = Menubar(self, self.scene, self.file, self.zoom, side_menu)
         menubar.setStyleSheet(MENU_STYLE)
         self.setMenuBar(menubar)
         menubar.addMenu(MenubarFilters(self, self.scene))
@@ -67,6 +67,7 @@ class Main(QMainWindow):
         self.window_list.append(new_window)
         new_window.scene.graphicsScene.addItem(item)
         new_window.scene.is_image_displayed = True
+        new_window.scene.graphicsScene.setSceneRect(item.boundingRect())
         new_window.scene.adjustWindowDimensions(new_window, img_height, img_width, file_name)
         
         if file_name is not None:

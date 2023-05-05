@@ -78,6 +78,7 @@ class Scene:
             return
         else:
             self.graphicsScene.addItem(item)
+            self.graphicsScene.setSceneRect(item.boundingRect())
             self.adjustWindowDimensions(parent, img_height, img_width, file_name)
 
     def adjustWindowDimensions(self, parent, img_height, img_width, file_name):
@@ -129,13 +130,15 @@ class Scene:
         self.view.mouseMoveEvent = self.drawing_view.mouseMoveEvent
         self.view.mouseReleaseEvent = self.drawing_view.mouseReleaseEvent
 
-    def clearPalette(self, parent, file, zoom):
+    def clearPalette(self, parent, file, zoom, side_menu):
         zoom.zoomRestart()
         self.is_image_displayed = False
 
         self.graphicsScene.clear()
         file.restartImage()
         parent.restartWindowLocation()
+
+        side_menu.restartSideMenu()
 
         self.graphicsScene = QGraphicsScene()
         self.view.setScene(self.graphicsScene)
