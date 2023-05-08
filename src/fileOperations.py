@@ -11,6 +11,7 @@ FILE_EX = "Image Files (*.png *.jpg *.webp)"
 class File:
     def __init__(self):
         self.image_path = None
+        self.loaded = False
 
     def openFile(self):
         file_name, _ = QFileDialog.getOpenFileName(None, "Otwórz plik", "", FILE_EX)
@@ -27,20 +28,24 @@ class File:
         except: return None, None, None, None
 
     def saveToOriginal(self, scene):
-        if not self.image_path:
+        if not self.image_path and not self.loaded:
             showAlert("Błąd!", "Nie wczytano jeszcze żadnego pliku.", QMessageBox.Warning)
             print("Nie wczytano jeszcze żadnego pliku")
             return
-        
+
+        if self.loaded:
+            self.saveFileAs(None, scene)
+            return
+
         if not path.exists(self.image_path):
             showAlert("Błąd!", "Podana ścieżka do pliku nie istnieje.", QMessageBox.Critical)
             print("Podana ścieżka do pliku nie istnieje")
             return
 
-        image = QImage(scene.sceneRect().size().toSize(), QImage.Format_ARGB32)
+        image = QImage(scene.graphicsScene.sceneRect().size().toSize(), QImage.Format_ARGB32)
 
         painter = QPainter(image)
-        scene.render(painter)
+        scene.graphicsScene.render(painter)
         painter.end()
 
         image.save(self.image_path)
@@ -83,8 +88,4 @@ class File:
             return False
 
     def restartImage(self):
-        if not self.image_path:
-            showAlert("Brak zdjęcia!", "Nie można wyczyścić pustego płótna", QMessageBox.Information)
-            print("Nie można wyczyścić pustego płótna")
-
         self.image_path = None

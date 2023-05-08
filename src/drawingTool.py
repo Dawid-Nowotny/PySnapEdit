@@ -43,7 +43,7 @@ class DrawingTool:
                 pen = QPen(self.brush_color, self.calculateBrushSize(), Qt.SolidLine)
                 self.path_item.setPen(pen)
 
-                brush_radius = self.calculateBrushSize() / 2
+                brush_radius = self.calculateBrushSize()
                 image_rect_adjusted = image_rect.adjusted(brush_radius, brush_radius, -brush_radius, -brush_radius)
 
                 if image_rect_adjusted.contains(scene_pos):
@@ -57,4 +57,4 @@ class DrawingTool:
         width_ratio = image_rect.width() / self.scene.view.width()
         height_ratio = image_rect.height() / self.scene.view.height()
         ratio = max(width_ratio, height_ratio)
-        return ratio*2
+        return ratio

@@ -20,7 +20,7 @@ class Menubar(QMenuBar):
         new_window.setShortcut(QKeySequence("Ctrl+N"))
 
         save_file = QAction("Zapisz", self)
-        save_file.triggered.connect(lambda: file.saveToOriginal(scene.graphicsScene))
+        save_file.triggered.connect(lambda: file.saveToOriginal(scene))
         save_file.setShortcut(QKeySequence("Ctrl+S"))
 
         save_fileAs = QAction("Zapisz jako", self)
@@ -29,7 +29,7 @@ class Menubar(QMenuBar):
 
         clear_image = QAction("Wyczyść płótno", self)
         clear_image.triggered.connect(lambda: scene.clearPalette(parent, file, zoom, side_menu))
-        clear_image.setShortcut(QKeySequence("Ctrl+C"))
+        clear_image.setShortcut(QKeySequence("Ctrl+X"))
 
         close_window = QAction("Zamknij okno", self)
         close_window.triggered.connect(lambda: parent.close())
