@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMenuBar, QAction, QApplication, QDialog
+from PyQt5.QtWidgets import QMenuBar, QAction, QApplication, QDialog, QMessageBox
 from PyQt5.QtGui import QKeySequence
 
 from resolutionPickerDialog import ResolutionPickerDialog
@@ -31,6 +31,15 @@ class Menubar(QMenuBar):
         clear_image.triggered.connect(lambda: scene.clearPalette(parent, file, zoom, side_menu))
         clear_image.setShortcut(QKeySequence("Ctrl+X"))
 
+        icon_info = QAction("Informacje o ikonach", self)
+        icon_info.triggered.connect(lambda: QMessageBox.information(self, "Źródło ikon", 
+            """Informacje o ikonach znajdziesz na stronie <br>
+            <a href="https://www.flaticon.com/free-icons/drawing" title="drawing icons">Drawing icons created by Freepik - Flaticon</a>
+            <br><a href="https://www.flaticon.com/free-icons/eraser" title="eraser icons">Eraser icons created by Creatype - Flaticon</a>
+            <br><a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by Good Ware - Flaticon</a>
+            """
+            ))
+
         close_window = QAction("Zamknij okno", self)
         close_window.triggered.connect(lambda: parent.close())
         close_window.setShortcut(QKeySequence("Ctrl+W"))
@@ -47,6 +56,8 @@ class Menubar(QMenuBar):
         file_menu.addAction(save_fileAs)
         file_menu.addSeparator()
         file_menu.addAction(clear_image)
+        file_menu.addSeparator()
+        file_menu.addAction(icon_info)
         file_menu.addSeparator()
         file_menu.addAction(close_window)
         file_menu.addAction(close_app)
