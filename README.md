@@ -6,6 +6,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 - Python 3.8 or later
+- Pip
 - [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
 
 ### Installing
